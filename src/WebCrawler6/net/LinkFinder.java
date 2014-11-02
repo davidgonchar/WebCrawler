@@ -54,8 +54,8 @@ public class LinkFinder implements Runnable {
                 //we visited this url
                 linkHandler.addVisited(url);
 
-                if (linkHandler.size() % 150 == 0) {
-                    System.out.println("Time to visit 150 distinct links = " +
+                if (linkHandler.size() % 1500 == 0) {
+                    System.out.println("Time to visit 1500 distinct links = " +
                             TimeUnit.SECONDS.convert(System.nanoTime() - t0, TimeUnit.NANOSECONDS));
                 }
 

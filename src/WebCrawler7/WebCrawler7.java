@@ -3,6 +3,7 @@ package WebCrawler7;
 import WebCrawler7.net.LinkFinderAction;
 import utils.webcrawler.LinkHandler;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ForkJoinPool;
@@ -14,8 +15,8 @@ import java.util.HashSet;
 
 public class WebCrawler7 implements LinkHandler {
 
-    private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
-    //    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<>());
+//    private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
+    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
     private String url;
     private ForkJoinPool mainPool;
 
@@ -45,7 +46,8 @@ public class WebCrawler7 implements LinkHandler {
 
     @Override
     public boolean visited(String s) {
-        return visitedLinks.contains(s);
+//        return visitedLinks.contains(s);
+        return false;
     }
 
     /**
