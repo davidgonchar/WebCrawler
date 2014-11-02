@@ -17,20 +17,20 @@ import utils.webcrawler.LinkHandler;
  */
 public class LinkFinderAction extends RecursiveAction {
     private String url;
-    private LinkHandler cr;
+    private LinkHandler linkHandler;
     /**
      * Used for statistics
      */
     private static final long t0 = System.nanoTime();
 
-    public LinkFinderAction(String url, LinkHandler cr) {
+    public LinkFinderAction(String url, LinkHandler linkHandler) {
         this.url = url;
-        this.cr = cr;
+        this.linkHandler = linkHandler;
     }
 
     @Override
     public void compute() {
-        if (!cr.visited(url)) {
+        if (!linkHandler.visited(url)) {
             try {
                 List<RecursiveAction> actions = new ArrayList<RecursiveAction>();
                 URL uriLink = new URL(url);
@@ -41,16 +41,17 @@ public class LinkFinderAction extends RecursiveAction {
                     LinkTag extracted = (LinkTag) list.elementAt(i);
 
                     if (!extracted.extractLink().isEmpty()
-                            && !cr.visited(extracted.extractLink())) {
+                            && !linkHandler.visited(extracted.extractLink())) {
 
-                        actions.add(new LinkFinderAction(extracted.extractLink(), cr));
+                        actions.add(new LinkFinderAction(extracted.extractLink(), linkHandler));
                     }
                 }
-                cr.addVisited(url);
+                linkHandler.addVisited(url);
 
-                if (cr.size() % 150 == 0) {
-                    System.out.println("Time for visit 150 distinct links= " +
+                if (linkHandler.size() % 1000 == 0) {
+                    System.out.println("Time for visit 1000 distinct links= " +
                             TimeUnit.SECONDS.convert(System.nanoTime() - t0, TimeUnit.NANOSECONDS));
+                    System.out.println("Total size: " + linkHandler.size());
                 }
 
                 //invoke recursively

@@ -45,8 +45,10 @@ public class WebCrawler6 implements LinkHandler {
         if (count == null) {
             visitedLinks.put(s, new MutableInt());
         } else {
-            System.out.println("" + count.get() + " add visited: " + s);
             count.increment();
+//            if (count.get() > 9) {
+//                System.out.println("" + count.get() + " add visited: " + s);
+//            }
         }
 //        visitedLinks.putIfAbsent(s, new AtomicInteger(0));
 //        visitedLinks.get(s).incrementAndGet();
