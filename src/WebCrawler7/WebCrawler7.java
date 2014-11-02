@@ -2,12 +2,13 @@ package WebCrawler7;
 
 import WebCrawler7.net.LinkFinderAction;
 import utils.webcrawler.LinkHandler;
+import utils.webcrawler.MutableInt;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ForkJoinPool;
-import java.util.HashSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by david on 02/11/14.
@@ -16,7 +17,10 @@ import java.util.HashSet;
 public class WebCrawler7 implements LinkHandler {
 
 //    private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
-    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
+//    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
+    private final ConcurrentMap<String, MutableInt> visitedLinks = new ConcurrentHashMap<String, MutableInt>();
+//    private final ConcurrentMap<String, AtomicInteger> visitedLinks = new ConcurrentHashMap<String, AtomicInteger>();
+
     private String url;
     private ForkJoinPool mainPool;
 
@@ -41,12 +45,20 @@ public class WebCrawler7 implements LinkHandler {
 
     @Override
     public void addVisited(String s) {
-        visitedLinks.add(s);
+        MutableInt count = visitedLinks.get(s);
+        if (count == null) {
+            visitedLinks.put(s, new MutableInt());
+        } else {
+            System.out.println("" + count.get() + " add visited: " + s);
+            count.increment();
+        }
+//        visitedLinks.putIfAbsent(s, new AtomicInteger(0));
+//        visitedLinks.get(s).incrementAndGet();
     }
 
     @Override
     public boolean visited(String s) {
-//        return visitedLinks.contains(s);
+//        return visitedLinks.containsKey(s);
         return false;
     }
 

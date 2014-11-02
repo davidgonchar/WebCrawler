@@ -1,21 +1,24 @@
 package WebCrawler6;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import utils.webcrawler.LinkHandler;
-import WebCrawler6.net.LinkFinder;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import java.util.HashSet;
+import utils.webcrawler.LinkHandler;
+import utils.webcrawler.MutableInt;
+import WebCrawler6.net.LinkFinder;
 
 /**
  * Created by david on 02/11/14.
  */
 public class WebCrawler6 implements LinkHandler {
 //    private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
-    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
+//    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
+    private final Map<String, MutableInt> visitedLinks = new ConcurrentHashMap<String, MutableInt>();
+//    private final ConcurrentMap<String, AtomicInteger> visitedLinks = new ConcurrentHashMap<String, AtomicInteger>();
 
     private String url;
     private ExecutorService execService;
@@ -38,13 +41,20 @@ public class WebCrawler6 implements LinkHandler {
 
     @Override
     public void addVisited(String s) {
-        visitedLinks.add(s);
+        MutableInt count = visitedLinks.get(s);
+        if (count == null) {
+            visitedLinks.put(s, new MutableInt());
+        } else {
+            System.out.println("" + count.get() + " add visited: " + s);
+            count.increment();
+        }
+//        visitedLinks.putIfAbsent(s, new AtomicInteger(0));
+//        visitedLinks.get(s).incrementAndGet();
     }
 
     @Override
     public boolean visited(String s) {
-//        return visitedLinks.contains(s);
-        return false;
+        return visitedLinks.containsKey(s);
     }
 
     private void startNewThread(String link) throws Exception {
