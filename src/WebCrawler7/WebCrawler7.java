@@ -16,10 +16,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class WebCrawler7 implements LinkHandler {
 
-//    private final Collection<String> visitedLinks = Collections.synchronizedSet(new HashSet<String>());
-//    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
-    private final ConcurrentMap<String, MutableInt> visitedLinks = new ConcurrentHashMap<String, MutableInt>();
-//    private final ConcurrentMap<String, AtomicInteger> visitedLinks = new ConcurrentHashMap<String, AtomicInteger>();
+    private final Collection<String> visitedLinks = Collections.synchronizedList(new ArrayList<String>());
+//    private final ConcurrentMap<String, MutableInt> visitedLinks = new ConcurrentHashMap<String, MutableInt>();
 
     private String url;
     private ForkJoinPool mainPool;
@@ -45,23 +43,15 @@ public class WebCrawler7 implements LinkHandler {
 
     @Override
     public void addVisited(String s) {
-        MutableInt count = visitedLinks.get(s);
-        if (count == null) {
-            visitedLinks.put(s, new MutableInt());
-        } else {
-            count.increment();
-//            if (count.get() > 9) {
-//                System.out.println("" + count.get() + " add visited: " + s);
-//            }
-        }
-//        visitedLinks.putIfAbsent(s, new AtomicInteger(0));
+        visitedLinks.add(s);
+//        visitedLinks.putIfAbsent(s, new MutableInt(0));
 //        visitedLinks.get(s).incrementAndGet();
     }
 
     @Override
     public boolean visited(String s) {
-//        return visitedLinks.containsKey(s);
         return false;
+//        return visitedLinks.containsKey(s);
     }
 
     /**

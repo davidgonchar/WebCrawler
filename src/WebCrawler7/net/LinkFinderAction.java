@@ -48,8 +48,8 @@ public class LinkFinderAction extends RecursiveAction {
                 }
                 linkHandler.addVisited(url);
 
-                if (linkHandler.size() % 1000 == 0) {
-                    System.out.println("Time for visit 1000 distinct links= " +
+                if (linkHandler.size() % 100 == 0) {
+                    System.out.println("Time for visit 100 distinct links= " +
                             TimeUnit.SECONDS.convert(System.nanoTime() - t0, TimeUnit.NANOSECONDS));
                     System.out.println("Total size: " + linkHandler.size());
                 }
